@@ -1,6 +1,6 @@
 import { Elysia } from "elysia"
 import cron from "./utils/cron"
-import { CosmWasmClient, SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate"
+import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate"
 import { contracts } from "@fuzio/contracts"
 import { getStatus } from "./query/getStatus"
 import { closeRound } from "./tx/endRound"
@@ -8,6 +8,17 @@ import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing"
 import { swagger } from "@elysiajs/swagger"
 import { GasPrice } from "@cosmjs/stargate"
 import { Decimal } from "@cosmjs/math"
+import { getPendingRewardByAddress } from "./query/getPendingRewardByAddress"
+import { getGameListByAddress } from "./query/getGameListByAddress"
+import { getUsersPerRound } from "./query/getUsersPerRound"
+import { getRoundById } from "./query/getRoundById"
+import { getCurrentPositionByAddress } from "./query/getCurrentPositionByAddress"
+import { getPendingRewardByAddressPerRound } from "./query/getPendingRewardByAddressPerRound"
+import { getContractAddress } from "./query/getContractAddress"
+import { getAdmins } from "./query/getAdmins"
+import { getConfig } from "./query/getConfig"
+import { getClaimInfoByUser } from "./query/getClaimInfoByUser"
+import { getClaimInfoPerRound } from "./query/getClaimInfoPerRound"
 
 const signer = await DirectSecp256k1HdWallet.fromMnemonic(process.env.MNEMONIC ?? "", {
 	prefix: "sei"
@@ -18,7 +29,7 @@ const signerAccount = await signer.getAccounts()
 const signingCosmwasmClient = await SigningCosmWasmClient.connectWithSigner(
 	"https://sei.kingnodes.com",
 	signer,
-	{ gasPrice: new GasPrice(Decimal.fromAtomics("25000", 6), "usei") }
+	{ gasPrice: new GasPrice(Decimal.fromAtomics("100000", 6), "usei") }
 )
 
 const {
@@ -48,14 +59,53 @@ const app = new Elysia()
 |    ;             ='-//||--"                  ='-//||--"
 '   .|               ''  ''                     ''  ''
  |::'|
-  |   |    🦎🦎🦎 Congratulations, you found this service. Much love from the Fuzio team <3 🦎🦎🦎
+  |   |    🦎🦎🦎 Congratulations, you found this service. Much love from Fuzio <3 🦎🦎🦎
    '..:'.
      '.  '--.____
        '-:______ '-._
                 '---'
 `
 	)
-	.get("/status", async () => await getStatus(client))
+	.group("/config", (app) =>
+		app
+			.get("/status", async () => await getStatus(client))
+			.get("/contractAddress", async () => await getContractAddress(client))
+			.get("/admins", async () => await getAdmins(client))
+			.get("/", async () => await getConfig(client))
+	)
+	.group("/user", (app) =>
+		app
+			.get(
+				"/:address/pendingReward",
+				async ({ params: { address } }) => await getPendingRewardByAddress(client, address)
+			)
+			.get(
+				"/:address/currentPosition",
+				async ({ params: { address } }) => await getCurrentPositionByAddress(client, address)
+			)
+			.get(
+				"/:address/gameList",
+				async ({ params: { address } }) => await getGameListByAddress(client, address)
+			)
+			.get(
+				"/:address/pendingRewardByRound/:id",
+				async ({ params: { address, id } }) =>
+					await getPendingRewardByAddressPerRound(client, address, id)
+			)
+			.get(
+				"/:address/claimInfo",
+				async ({ params: { address } }) => await getClaimInfoByUser(client, address)
+			)
+	)
+	.group("/round", (app) =>
+		app
+			.get("/:id/users", async ({ params: { id } }) => await getUsersPerRound(client, id))
+			.get("/:id", async ({ params: { id } }) => await getRoundById(client, id))
+			.get(
+				"/:id/claimInfo",
+				async ({ params: { id } }) => await getClaimInfoPerRound(client, id)
+			)
+	)
 	.use(
 		swagger({
 			documentation: {
