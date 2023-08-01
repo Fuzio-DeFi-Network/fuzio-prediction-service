@@ -5,6 +5,11 @@ export const getCurrentPositionByAddress = async (
 	queryClient: FuzioNativePredictionQueryClient,
 	address: string
 ): Promise<MyCurrentPositionResponse> => {
-	const currentPositionByAddress = await queryClient.myCurrentPosition({ address })
-	return currentPositionByAddress
+	try {
+		const currentPositionByAddress = await queryClient.myCurrentPosition({ address })
+		return currentPositionByAddress
+	} catch (error) {
+		console.error("An error occurred:", error)
+		throw error
+	}
 }

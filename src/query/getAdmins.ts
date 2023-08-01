@@ -3,6 +3,11 @@ import { type FuzioNativePredictionQueryClient } from "@fuzio/contracts/types/Fu
 export const getAdmins = async (
 	queryClient: FuzioNativePredictionQueryClient
 ): Promise<string[]> => {
-	const { admins } = await queryClient.getAdmins()
-	return admins
+	try {
+		const { admins } = await queryClient.getAdmins()
+		return admins
+	} catch (error) {
+		console.error("An error occurred:", error)
+		throw error
+	}
 }

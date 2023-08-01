@@ -16,5 +16,8 @@ export const closeRound = async (client: FuzioNativePredictionClient) => {
 			console.log(`=== Current Round did not finish yet. ===`)
 			console.log("Remaining Time:", Number(liveRoundremainTime / 1e9).toFixed(2))
 		}
-	} catch {}
+	} catch (error) {
+		console.error("An error occurred:", error)
+		throw error
+	}
 }

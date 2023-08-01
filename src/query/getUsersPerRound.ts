@@ -20,6 +20,11 @@ export const getUsersPerRound = async (
 		}
 	}
 
-	await getUsersPaginated()
-	return allUsers
+	try {
+		await getUsersPaginated()
+		return allUsers
+	} catch (error) {
+		console.error("An error occurred:", error)
+		throw error
+	}
 }

@@ -5,6 +5,11 @@ export const getRoundById = async (
 	queryClient: FuzioNativePredictionQueryClient,
 	roundId: string
 ): Promise<FinishedRound> => {
-	const finishedRound = await queryClient.finishedRound({ roundId })
-	return finishedRound
+	try {
+		const finishedRound = await queryClient.finishedRound({ roundId })
+		return finishedRound
+	} catch (error) {
+		console.error("An error occurred:", error)
+		throw error
+	}
 }

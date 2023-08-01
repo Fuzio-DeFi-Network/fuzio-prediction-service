@@ -20,6 +20,11 @@ export const getClaimInfoPerRound = async (
 		}
 	}
 
-	await getClaimsPaginated()
-	return allClaimInfo
+	try {
+		await getClaimsPaginated()
+		return allClaimInfo
+	} catch (error) {
+		console.error("An error occurred:", error)
+		throw error
+	}
 }

@@ -20,6 +20,11 @@ export const getGameListByAddress = async (
 		}
 	}
 
-	await getGamesPaginated()
-	return currentGameList
+	try {
+		await getGamesPaginated()
+		return currentGameList
+	} catch (error) {
+		console.error("An error occurred:", error)
+		throw error
+	}
 }

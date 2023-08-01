@@ -4,6 +4,11 @@ export const getPendingRewardByAddress = async (
 	queryClient: FuzioNativePredictionQueryClient,
 	player: string
 ): Promise<string> => {
-	const { pending_reward } = await queryClient.myPendingReward({ player })
-	return pending_reward
+	try {
+		const { pending_reward } = await queryClient.myPendingReward({ player })
+		return pending_reward
+	} catch (error) {
+		console.error("An error occurred:", error)
+		throw error
+	}
 }

@@ -4,6 +4,11 @@ import { type StatusResponse } from "@fuzio/contracts/types/FuzioNativePredictio
 export const getStatus = async (
 	queryClient: FuzioNativePredictionQueryClient
 ): Promise<StatusResponse> => {
-	const status = await queryClient.status()
-	return status
+	try {
+		const status = await queryClient.status()
+		return status
+	} catch (error) {
+		console.error("An error occurred:", error)
+		throw error
+	}
 }

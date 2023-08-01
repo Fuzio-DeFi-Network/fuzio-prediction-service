@@ -2,6 +2,11 @@ import { type FuzioNativePredictionQueryClient } from "@fuzio/contracts/types/Fu
 import { type Config } from "@fuzio/contracts/types/FuzioNativePrediction.types"
 
 export const getConfig = async (queryClient: FuzioNativePredictionQueryClient): Promise<Config> => {
-	const config = await queryClient.config()
-	return config
+	try {
+		const config = await queryClient.config()
+		return config
+	} catch (error) {
+		console.error("An error occurred:", error)
+		throw error
+	}
 }

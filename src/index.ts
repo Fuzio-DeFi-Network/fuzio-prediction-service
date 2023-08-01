@@ -127,26 +127,27 @@ const app = new Elysia()
 			}
 		})
 	)
+	.onError(({ code, set }) => {
+		if (code === "NOT_FOUND") {
+			set.status = 404
+
+			return "Route Not Found :("
+		}
+		if (code === "VALIDATION") {
+			return "Validation Error :("
+		}
+		if (code === "INTERNAL_SERVER_ERROR") {
+			return "Internal Server Error :("
+		}
+		if (code === "PARSE") {
+			return "Parsing Error :("
+		}
+		if (code === "UNKNOWN") {
+			return "Unknown Error :("
+		}
+	})
 	.listen(3000)
 
-console.log(`🦎 Fuzio Service Runner started at ${app.server?.hostname}:${app.server?.port}`)
-console.log(`
-                                  _____________
-                           __,---'::.-  -::_ _ '-----.___      ______
-                       _,-'::_  ::-  -  -. _   ::-::_   .'--,'   :: .:'-._
-                    -'_ ::   _  ::_ .:   :: - _ .:   ::- _/ ::   ,-. ::. '-._
-                _,-'   ::-  ::        ::-  _ ::  -  ::     |  .: ((|))      ::'
-        ___,---'   ::    ::    ;::   ::     :.- _ ::._  :: | :    '_____::..--'
-    ,-""  ::  ::.   ,------.  (.  ::  |  ::  ::  ,-- :. _  :'. ::  |       '-._
-   '     ::   '   _._.:_  :.)___,-------------._ :: ____'-._ '._ ::'--...___; ;
- ;:::. ,--'--"""""      /  /                     |. |     ''-----''''---------'
-;  '::;              _ /.:/_,                    _|.:|_,
-|    ;             ='-//||--"                  ='-//||--"
-'   .|               ''  ''                     ''  ''
- |::'|
-  |   |
-   '..:'.
-     '.  '--.____
-       '-:______ '-._
-                '---'
-`)
+console.log(
+	`🦎 Fuzio Prediction Microservice started at ${app.server?.hostname}:${app.server?.port}`
+)

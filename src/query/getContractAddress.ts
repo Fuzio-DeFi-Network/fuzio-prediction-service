@@ -3,6 +3,11 @@ import { type FuzioNativePredictionQueryClient } from "@fuzio/contracts/types/Fu
 export const getContractAddress = async (
 	queryClient: FuzioNativePredictionQueryClient
 ): Promise<string> => {
-	const contractAddress = queryClient.contractAddress
-	return contractAddress
+	try {
+		const contractAddress = queryClient.contractAddress
+		return contractAddress
+	} catch (error) {
+		console.error("An error occurred:", error)
+		throw error
+	}
 }
