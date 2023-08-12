@@ -1,3 +1,5 @@
+/* eslint-disable canonical/id-match */
+/* eslint-disable @typescript-eslint/naming-convention */
 import { type FuzioNativePredictionQueryClient } from "@fuzio/contracts/types/FuzioNativePrediction.client"
 import { type BetInfo } from "@fuzio/contracts/types/FuzioNativePrediction.types"
 
@@ -10,9 +12,9 @@ export const getGameListByAddress = async (
 	let currentGameList: BetInfo[] = []
 	const getGamesPaginated = async (startAfter?: string) => {
 		const { my_game_list } = await queryClient.myGameList({
+			limit: FETCH_LIMIT,
 			player,
-			startAfter,
-			limit: FETCH_LIMIT
+			startAfter
 		})
 		currentGameList = [...currentGameList, ...my_game_list]
 		if (my_game_list.length === FETCH_LIMIT) {
@@ -24,6 +26,7 @@ export const getGameListByAddress = async (
 		await getGamesPaginated()
 		return currentGameList
 	} catch (error) {
+		// eslint-disable-next-line no-console
 		console.error("An error occurred:", error)
 		throw error
 	}

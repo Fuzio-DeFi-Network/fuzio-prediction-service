@@ -7,6 +7,7 @@ export const getContractAddress = async (
 		const contractAddress = queryClient.contractAddress
 		return contractAddress
 	} catch (error) {
+		// eslint-disable-next-line no-console
 		console.error("An error occurred:", error)
 		throw error
 	}

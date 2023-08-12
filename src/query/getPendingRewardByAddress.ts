@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { type FuzioNativePredictionQueryClient } from "@fuzio/contracts/types/FuzioNativePrediction.client"
 
 export const getPendingRewardByAddress = async (
@@ -8,6 +9,7 @@ export const getPendingRewardByAddress = async (
 		const { pending_reward } = await queryClient.myPendingReward({ player })
 		return pending_reward
 	} catch (error) {
+		// eslint-disable-next-line no-console
 		console.error("An error occurred:", error)
 		throw error
 	}

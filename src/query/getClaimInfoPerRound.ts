@@ -1,5 +1,7 @@
+/* eslint-disable canonical/id-match */
+/* eslint-disable @typescript-eslint/naming-convention */
 import { type FuzioNativePredictionQueryClient } from "@fuzio/contracts/types/FuzioNativePrediction.client"
-import { ClaimInfo, type BetInfo } from "@fuzio/contracts/types/FuzioNativePrediction.types"
+import { type ClaimInfo } from "@fuzio/contracts/types/FuzioNativePrediction.types"
 
 const FETCH_LIMIT = 20
 
@@ -10,9 +12,9 @@ export const getClaimInfoPerRound = async (
 	let allClaimInfo: ClaimInfo[] = []
 	const getClaimsPaginated = async (startAfter?: string) => {
 		const { claim_info } = await queryClient.getClaimInfoPerRound({
+			limit: FETCH_LIMIT,
 			roundId,
-			startAfter,
-			limit: FETCH_LIMIT
+			startAfter
 		})
 		allClaimInfo = [...allClaimInfo, ...claim_info]
 		if (claim_info.length === FETCH_LIMIT) {
@@ -24,6 +26,7 @@ export const getClaimInfoPerRound = async (
 		await getClaimsPaginated()
 		return allClaimInfo
 	} catch (error) {
+		// eslint-disable-next-line no-console
 		console.error("An error occurred:", error)
 		throw error
 	}

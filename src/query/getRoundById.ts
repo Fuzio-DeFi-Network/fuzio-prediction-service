@@ -9,6 +9,7 @@ export const getRoundById = async (
 		const finishedRound = await queryClient.finishedRound({ roundId })
 		return finishedRound
 	} catch (error) {
+		// eslint-disable-next-line no-console
 		console.error("An error occurred:", error)
 		throw error
 	}

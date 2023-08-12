@@ -8,6 +8,7 @@ export const getStatus = async (
 		const status = await queryClient.status()
 		return status
 	} catch (error) {
+		// eslint-disable-next-line no-console
 		console.error("An error occurred:", error)
 		throw error
 	}

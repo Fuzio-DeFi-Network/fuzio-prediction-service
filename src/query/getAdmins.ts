@@ -7,6 +7,7 @@ export const getAdmins = async (
 		const { admins } = await queryClient.getAdmins()
 		return admins
 	} catch (error) {
+		// eslint-disable-next-line no-console
 		console.error("An error occurred:", error)
 		throw error
 	}

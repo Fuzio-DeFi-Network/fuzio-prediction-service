@@ -1,3 +1,5 @@
+/* eslint-disable canonical/id-match */
+/* eslint-disable @typescript-eslint/naming-convention */
 import { type FuzioNativePredictionQueryClient } from "@fuzio/contracts/types/FuzioNativePrediction.client"
 import { type BetInfo } from "@fuzio/contracts/types/FuzioNativePrediction.types"
 
@@ -10,9 +12,9 @@ export const getUsersPerRound = async (
 	let allUsers: BetInfo[] = []
 	const getUsersPaginated = async (startAfter?: string) => {
 		const { round_users } = await queryClient.getUsersPerRound({
+			limit: FETCH_LIMIT,
 			roundId,
-			startAfter,
-			limit: FETCH_LIMIT
+			startAfter
 		})
 		allUsers = [...allUsers, ...round_users]
 		if (round_users.length === FETCH_LIMIT) {
@@ -24,6 +26,7 @@ export const getUsersPerRound = async (
 		await getUsersPaginated()
 		return allUsers
 	} catch (error) {
+		// eslint-disable-next-line no-console
 		console.error("An error occurred:", error)
 		throw error
 	}
