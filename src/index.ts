@@ -12,6 +12,7 @@ import { getStatus } from "./query/getStatus"
 import { getUsersPerRound } from "./query/getUsersPerRound"
 import { closeRound } from "./tx/endRound"
 import { cron } from "./utils/cron"
+import { rpcUrl } from "./utils/urls"
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate"
 import { Decimal } from "@cosmjs/math"
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing"
@@ -22,7 +23,8 @@ import { Elysia } from "elysia"
 
 // eslint-disable-next-line canonical/id-match
 const signer = await DirectSecp256k1HdWallet.fromMnemonic(
-	process.env.MNEMONIC ?? "",
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	process.env.MNEMONIC!,
 	{
 		prefix: "sei"
 	}
@@ -31,7 +33,7 @@ const signer = await DirectSecp256k1HdWallet.fromMnemonic(
 const signerAccount = await signer.getAccounts()
 
 const signingCosmWasmClient = await SigningCosmWasmClient.connectWithSigner(
-	"https://rpc-sei-testnet.rhinostake.com/",
+	rpcUrl,
 	signer,
 	{ gasPrice: new GasPrice(Decimal.fromAtomics("100000", 6), "usei") }
 )
@@ -46,12 +48,14 @@ const {
 const client = new FuzioNativePredictionClient(
 	signingCosmWasmClient,
 	signerAccount[0].address,
-	process.env.CONTRACT_ADDRESS ?? ""
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	process.env.CONTRACT_ADDRESS!
 )
 
 const queryClient = new FuzioNativePredictionQueryClient(
 	signingCosmWasmClient,
-	process.env.CONTRACT_ADDRESS ?? ""
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	process.env.CONTRACT_ADDRESS!
 )
 
 const app = new Elysia()
