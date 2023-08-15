@@ -1,3 +1,3 @@
-export const rpcUrl = `https://rpc-sei${
+export const rpcUrl = `https://rpc${
 	process.env.SEI_NETWORK !== "MAINNET" && "-testnet"
-}.rhinostake.com/`
+}.sei-apis.com/`
